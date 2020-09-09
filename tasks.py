@@ -16,17 +16,21 @@ df.sort_values(by=["start_time"], inplace=True)
 # task_2
 unique_station_ids = df["start_station_id"].unique().tolist()
 print(len(unique_station_ids))
-# answer=272
+answer=272
 
 # task_3
 min_d = df["duration_sec"].min()
 max_d = df["duration_sec"].max()
 minimal_duration_rows = df.loc[df["duration_sec"] == min_d]
 minimal_duration_bike_ids = minimal_duration_rows["bike_id"].tolist()
-print(minimal_duration_bike_ids)
+print(len(minimal_duration_bike_ids))
+print(min_d)
+# 61 seconds; 58 records
 maximal_duration_rows = df.loc[df["duration_sec"] == max_d]
 maximal_duration_bike_ids = maximal_duration_rows["bike_id"].tolist()
 print(maximal_duration_bike_ids)
+print(max_d)
+# 86369 seconds; one bike_id=2231
 
 # task_4
 
@@ -58,8 +62,9 @@ plt.savefig("box-plot.png")
 
 df1 = df.groupby(["start_station_id", "start_station_name", "end_station_id", "end_station_name"]).size()\
     .reset_index(name="count")
-df2 = df1.loc[df1["count"] == df1["count"].max()]
-print(df2[["start_station_name", "end_station_name"]])
+print(df1.loc[df1["count"] == df1["count"].max()])
+# start_station_id=15; San Francisco Ferry Building
+# end_station_id=6;  The Embarcadero at Sansome St
 
 # task_6
 
