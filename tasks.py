@@ -6,7 +6,7 @@ data_source = "2017-fordgobike-tripdata.csv"
 #                 "start_station_latitude", "start_station_longitude","end_station_id","end_station_name",
 #                 "end_station_latitude","end_station_longitude","bike_id","user_type"]
 
-df = pd.read_csv(data_source, sep=",", header=0, usecols=[0, 1, 2, 3, 7, 11, 12])
+df = pd.read_csv(data_source, sep=",", header=0, usecols=[0, 1, 2, 3, 4, 7, 8, 11, 12])
 
 # task_1
 unique_station_ids = df["start_station_id"].unique().tolist()
@@ -25,5 +25,8 @@ print(maximal_duration_bike_ids)
 
 # task_5
 
-df["freq"] = df.groupby("start_station_id")["start_station_id"].transform("count")
-print(df.loc[df["freq"] == df["freq"].max()])
+df1 = df.groupby(["start_station_id", "start_station_name", "end_station_id", "end_station_name"]).size()\
+    .reset_index(name="count")
+df2 = df1.loc[df1["count"] == df1["count"].max()]
+print(df2[["start_station_name", "end_station_name"]])
+
