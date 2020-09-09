@@ -13,12 +13,12 @@ df = pd.read_csv(data_source, sep=",", header=0, usecols=[0, 1, 2, 3, 4, 7, 8, 1
 df.sort_values(by=["start_time"], inplace=True)
 
 
-# task_1
+# task_2
 unique_station_ids = df["start_station_id"].unique().tolist()
 print(len(unique_station_ids))
 # answer=272
 
-# task_2
+# task_3
 min_d = df["duration_sec"].min()
 max_d = df["duration_sec"].max()
 minimal_duration_rows = df.loc[df["duration_sec"] == min_d]
@@ -27,6 +27,32 @@ print(minimal_duration_bike_ids)
 maximal_duration_rows = df.loc[df["duration_sec"] == max_d]
 maximal_duration_bike_ids = maximal_duration_rows["bike_id"].tolist()
 print(maximal_duration_bike_ids)
+
+# task_4
+
+bike_ids_list = list(set(df["bike_id"].tolist()))
+min_id = min(bike_ids_list)
+max_id = max(bike_ids_list)
+width = (max_id - min_id) / 10
+bins = []
+for i in range(10):
+    left = min_id + i * width
+    right = left + width
+    bins.append((left, right))
+
+dict1 = {}
+for b in bins:
+    left = int(b[0])
+    right = int(b[1])
+    dict1[b] = df.loc[(df["bike_id"] >= left) & (df["bike_id"] < right)]["duration_sec"].tolist()
+
+labels = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"]
+data = dict1.values()
+plt.boxplot(data)
+plt.xticks(range(1, 11), labels)
+plt.xlabel("bins of bike_ids")
+plt.ylabel("trip durations in seconds")
+plt.savefig("box-plot.png")
 
 # task_5
 
@@ -64,5 +90,5 @@ x_values = range(len(days))
 y_values = most_freq_hour
 plt.plot(x_values, y_values, "ob")
 plt.xlabel("Days from 06-28 to 12-31")
-plt.ylabel("Pick hour of the day")
-plt.savefig("pick_hour.png")
+plt.ylabel("Peak hour of the day")
+plt.savefig("peak_hour.png")
